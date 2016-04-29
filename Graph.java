@@ -83,7 +83,20 @@ public class Graph {
     return false;
   }
   
-  
+  public int size(){
+    return N;
+  }
+  public boolean moves(){
+    int num=N*(N-1);
+    int sum=0;
+    for(int i=0;i<N;++i){
+      sum+=degree(i);
+    }
+    if (sum==num)
+      return false;
+    else
+      return true;
+  }
   public static void main(String[] args) {
     
     Graph G = new Graph(N);
