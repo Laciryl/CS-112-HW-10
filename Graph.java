@@ -11,8 +11,8 @@ public class Graph {
   
   private static int[][] B = new int[N][N];       // 0 = no edge; 1 = red edge; -1 = blue edge
   
-  public Graph(int N) {                           // a constructor for a instance of the class with N vertices 
-    B = new int[N][N];
+  public Graph(int Q) {                           // a constructor for a instance of the class with N vertices 
+    B = new int[Q][Q];
   }
   
   public void addEdge(int u, int v, int w) {       // add an edge from vertex u to v with value w (which in this hw will be  only 0, -1, or 1)
@@ -30,7 +30,7 @@ public class Graph {
   }
   
   public boolean isEdge(int u, int v) {           // return true or false depending on whether there is an edge (of either color) from u to v
-    return (B[u][v] == 1) || (B[u][v] == 0);
+    return (B[u][v] == 1) || (B[u][v] == -1);
   }
   
   public int degree(int v) {                      // return the number of edges of either color connected to vertex v
@@ -46,7 +46,7 @@ public class Graph {
     int count = 0;
     for (int i = 0; i < N; ++i) {
       if (getEdge(i,v) == w);
-        ++count;
+      ++count;
     }
     return count;
   }
@@ -59,20 +59,22 @@ public class Graph {
       for (int j = 0; j < 6; ++j) {
         out += "  ";
         if (getEdge(i,j) == 0)
-          out += " ";
+          out += "  ";
         else
           out += getEdge(i,j);
       }
       out += "\n";
-    }               
+    }
+    System.out.println(out);
   }
   
   public boolean isCycleOfLength(int n, int w) {  // return true iff there is a cycle of length n among edges of color w 
     for (int i = 0; i < 6; ++i) {
       for (int j = (i+1) % 6; j != i; j = (j+1) % 6) { // j should be the second vertex
         if (isEdge(i, j)) {
+          int color = getEdge(i,j);
           for (int k = (j+1) % 6; k != j; k = (k+1) % 6) {
-            if (isEdge(j, k) && k != i)
+            if (((isEdge(j, k) && k != i) && (isEdge(i,k))) && ((getEdge(j,k) == color) && (getEdge(i,k) == color)))
               return true;
           }
         }
@@ -80,4 +82,26 @@ public class Graph {
     }
     return false;
   }
+  
+  
+  public static void main(String[] args) {
+    
+    Graph G = new Graph(N);
+    
+    G.printEdges();
+    
+    G.addEdge(0, 1, -1);
+    G.addEdge(1,4,-1);
+    G.addEdge(4,0,-1);
+    
+    G.printEdges();
+    
+    System.out.println(G.isEdge(4,1));
+    System.out.println(G.isEdge(0,1));
+    System.out.println(G.isEdge(4,0));
+    
+    System.out.println(G.isCycleOfLength(3, -1));
+    
+  }
+  
 }
